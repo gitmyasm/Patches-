@@ -65,5 +65,31 @@ val unlockPremiumPatch = patch(
         // A re-signed APK fails Play's license check, which otherwise shuts
         // the app down. Skip the check entirely.
         PairIpLicenseCheckFingerprint.method.returnEarly()
+
+        // --- 6. Account UI -----------------------------------------------
+        // The account screen still reads the raw server plan and prints
+        // "Free Plan". Force the visible label to "Premium Plan".
+        PlanLabelFingerprint.method.addInstructions(
+            0,
+            """
+                const-string v0, "Premium Plan"
+                return-object v0
+            """.trimIndent(),
+        )
+
+        // The badge icon is selected from the raw plan enum. Override the
+        // result at the single point where every branch converges, before
+        // the profile header model is constructed.
+        val badgeAnchorIndex = AccountBadgeFingerprint.match.instructionMatches.first().index
+        AccountBadgeFingerprint.method.addInstructions(
+            badgeAnchorIndex,
+            """
+                sget-object v4, Ly6/q;->r0:Ldh/p;
+                invoke-virtual {v4}, Ldh/p;->getValue()Ljava/lang/Object;
+                move-result-object v4
+                check-cast v4, Lpr/b;
+                move-object/from16 v28, v4
+            """.trimIndent(),
+        )
     }
 }

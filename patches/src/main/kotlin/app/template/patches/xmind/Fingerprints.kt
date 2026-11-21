@@ -1,6 +1,7 @@
 package app.template.patches.xmind
 
 import app.morphe.patcher.Fingerprint
+import app.morphe.patcher.newInstance
 import com.android.tools.smali.dexlib2.AccessFlags
 
 /**
@@ -79,6 +80,39 @@ object PlanTierFingerprint : Fingerprint(
     accessFlags = listOf(AccessFlags.PUBLIC, AccessFlags.STATIC, AccessFlags.FINAL),
     returnType = "Lgm/h;",
     parameters = listOf("Lrm/x;"),
+)
+
+/** gm.n.g(): builds the account screen plan label, e.g. "Free Plan". */
+object PlanLabelFingerprint : Fingerprint(
+    definingClass = "Lgm/n;",
+    name = "g",
+    accessFlags = listOf(AccessFlags.PUBLIC, AccessFlags.STATIC, AccessFlags.FINAL),
+    returnType = "Ljava/lang/String;",
+    parameters = listOf("Lrm/b0;", "Ld1/o;"),
+)
+
+/**
+ * mn.j.b(): builds the account profile header, including the plan badge.
+ * The `new-instance Lmn/k;` instruction is the single convergence point
+ * after every badge-selection branch, so it is used as the patch anchor.
+ */
+object AccountBadgeFingerprint : Fingerprint(
+    definingClass = "Lmn/j;",
+    name = "b",
+    accessFlags = listOf(AccessFlags.PUBLIC, AccessFlags.STATIC, AccessFlags.FINAL),
+    returnType = "V",
+    parameters = listOf(
+        "Ljava/lang/String;",
+        "Lmn/d;",
+        "Lsh/a;",
+        "Lp1/r;",
+        "Lsh/a;",
+        "F",
+        "Ld1/o;",
+        "I",
+        "I",
+    ),
+    filters = listOf(newInstance("Lmn/k;")),
 )
 
 /**
