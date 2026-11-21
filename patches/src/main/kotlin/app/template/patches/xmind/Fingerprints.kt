@@ -92,6 +92,19 @@ object PlanLabelFingerprint : Fingerprint(
 )
 
 /**
+ * eh.k0.P(): builds the subscription label from the raw user subscription.
+ * This is a second, separate label source on the account screen and can still
+ * return "Free Plan" even after gm.n.g() has been overridden.
+ */
+object SubscriptionLabelFingerprint : Fingerprint(
+    definingClass = "Leh/k0;",
+    name = "P",
+    accessFlags = listOf(AccessFlags.PUBLIC, AccessFlags.STATIC, AccessFlags.FINAL),
+    returnType = "Ljava/lang/String;",
+    parameters = listOf("Lrm/x;"),
+)
+
+/**
  * mn.j.b(): builds the account profile header, including the plan badge.
  * The `new-instance Lmn/k;` instruction is the single convergence point
  * after every badge-selection branch, so it is used as the patch anchor.

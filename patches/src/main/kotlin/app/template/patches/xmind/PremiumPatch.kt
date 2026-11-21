@@ -77,6 +77,17 @@ val unlockPremiumPatch = patch(
             """.trimIndent(),
         )
 
+        // The account screen reads the subscription label through this second
+        // helper as well. Force it to the same value so no section can still
+        // display "Free Plan" or "Pro Plan".
+        SubscriptionLabelFingerprint.method.addInstructions(
+            0,
+            """
+                const-string v0, "Premium"
+                return-object v0
+            """.trimIndent(),
+        )
+
         // The badge icon is selected from the raw plan enum. Override the
         // result at the single point where every branch converges, before
         // the profile header model is constructed.
