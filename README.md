@@ -14,7 +14,7 @@ Or tap this link to add it directly:
 
 [https://morphe.software/add-source?github=gitmyasm/Patches-&name=Xmind%20Premium&app=net.xmind.doughnut](https://morphe.software/add-source?github=gitmyasm/Patches-&name=Xmind%20Premium&app=net.xmind.doughnut)
 
-The published bundle is available from the [v1.0.1 release](https://github.com/gitmyasm/Patches-/releases/tag/v1.0.1).
+The published bundle is available from the [v1.0.2 release](https://github.com/gitmyasm/Patches-/releases/tag/v1.0.2).
 
 ## Development
 

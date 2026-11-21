@@ -68,11 +68,11 @@ val unlockPremiumPatch = patch(
 
         // --- 6. Account UI -----------------------------------------------
         // The account screen still reads the raw server plan and prints
-        // "Free Plan". Force the visible label to "Premium Plan".
+        // "Free Plan". Force the visible label to just "Premium".
         PlanLabelFingerprint.method.addInstructions(
             0,
             """
-                const-string v0, "Premium Plan"
+                const-string v0, "Premium"
                 return-object v0
             """.trimIndent(),
         )
