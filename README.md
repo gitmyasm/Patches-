@@ -7,11 +7,14 @@ Morphe patch bundle. Built from [morphe-patches-template](https://github.com/Mor
 Add this repository as a patch source in Morphe Manager:
 
 ```
-github.com/gitmyasm/Patches-
+https://github.com/gitmyasm/Patches-
 ```
 
-The bundle is private, so Morphe Manager needs a token with read access, or download
-the `.mpp` artifact from the latest GitHub Actions run and import it manually.
+Or tap this link to add it directly:
+
+[https://morphe.software/add-source?github=gitmyasm/Patches-&name=Xmind%20Premium&app=net.xmind.doughnut](https://morphe.software/add-source?github=gitmyasm/Patches-&name=Xmind%20Premium&app=net.xmind.doughnut)
+
+The published bundle is available from the [v1.0.0 release](https://github.com/gitmyasm/Patches-/releases/tag/v1.0.0).
 
 ## Development
 
