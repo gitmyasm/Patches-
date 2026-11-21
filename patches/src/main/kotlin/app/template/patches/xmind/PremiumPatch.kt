@@ -80,7 +80,7 @@ val unlockPremiumPatch = patch(
         // The badge icon is selected from the raw plan enum. Override the
         // result at the single point where every branch converges, before
         // the profile header model is constructed.
-        val badgeAnchorIndex = AccountBadgeFingerprint.match.instructionMatches.first().index
+        val badgeAnchorIndex = AccountBadgeFingerprint.match().instructionMatches.first().index
         AccountBadgeFingerprint.method.addInstructions(
             badgeAnchorIndex,
             """
