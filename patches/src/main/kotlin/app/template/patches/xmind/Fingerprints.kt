@@ -1,7 +1,9 @@
 package app.template.patches.xmind
 
 import app.morphe.patcher.Fingerprint
+import app.morphe.patcher.methodCall
 import app.morphe.patcher.newInstance
+import app.morphe.patcher.string
 import com.android.tools.smali.dexlib2.AccessFlags
 
 /**
@@ -139,4 +141,46 @@ object PairIpLicenseCheckFingerprint : Fingerprint(
     accessFlags = listOf(AccessFlags.PUBLIC, AccessFlags.STATIC),
     returnType = "V",
     parameters = listOf("Landroid/content/Context;"),
+)
+
+/**
+ * go/e2.invokeSuspend(): cloud "move to trash" branch.
+ *
+ * The remote call is skipped so the app's existing local trash update still
+ * runs even when Xmind's server rejects the re-signed app.
+ */
+object CloudMoveToTrashFingerprint : Fingerprint(
+    definingClass = "Lgo/e2;",
+    name = "invokeSuspend",
+    accessFlags = listOf(AccessFlags.PUBLIC, AccessFlags.FINAL),
+    returnType = "Ljava/lang/Object;",
+    parameters = listOf("Ljava/lang/Object;"),
+    filters = listOf(
+        methodCall(
+            "Lvm/b;",
+            "moveToTrash",
+            listOf("Len/bh;", "Lhh/c;"),
+            "Ljava/lang/Object;",
+        ),
+    ),
+)
+
+/** Team data sync clears the local trash table before fetching server data. */
+object TeamTrashClearFingerprint : Fingerprint(
+    definingClass = "Lgo/e2;",
+    name = "m",
+    accessFlags = listOf(AccessFlags.PRIVATE, AccessFlags.FINAL),
+    returnType = "Ljava/lang/Object;",
+    parameters = listOf("Ljava/lang/Object;"),
+    filters = listOf(string("DELETE FROM TrashEntity WHERE team_id IS NOT NULL")),
+)
+
+/** Trash screen refresh clears one team's local trash rows before reinserting server rows. */
+object TrashRefreshClearFingerprint : Fingerprint(
+    definingClass = "Laq/h;",
+    name = "e",
+    accessFlags = listOf(AccessFlags.PRIVATE, AccessFlags.FINAL),
+    returnType = "Ljava/lang/Object;",
+    parameters = listOf("Ljava/lang/Object;"),
+    filters = listOf(string("DELETE FROM TrashEntity WHERE team_id ")),
 )

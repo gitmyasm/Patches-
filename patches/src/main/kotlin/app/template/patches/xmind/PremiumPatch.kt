@@ -1,6 +1,8 @@
 package app.template.patches.xmind
 
 import app.morphe.patcher.extensions.InstructionExtensions.addInstructions
+import app.morphe.patcher.extensions.InstructionExtensions.removeInstructions
+import app.morphe.patcher.extensions.InstructionExtensions.replaceInstruction
 import app.morphe.patcher.patch.patch
 import app.morphe.patcher.util.returnEarly
 
@@ -20,7 +22,7 @@ import app.morphe.patcher.util.returnEarly
 @Suppress("unused")
 val unlockPremiumPatch = patch(
     name = "Unlock Premium / Pro",
-    description = "Unlocks Xmind Premium (Pro+) features that are checked locally.",
+    description = "Unlocks local Xmind Premium (Pro+) features and keeps deleted maps in Recently Deleted.",
     default = true,
 ) {
     compatibleWith(COMPATIBILITY_XMIND)
@@ -101,6 +103,33 @@ val unlockPremiumPatch = patch(
                 check-cast v4, Lpr/b;
                 move-object/from16 v28, v4
             """.trimIndent(),
+        )
+
+        // --- 7. Recently Deleted -------------------------------------------
+        // Cloud deletion first calls Xmind's server. A re-signed app can be
+        // rejected there, which makes the app skip its own local "move to
+        // trash" database update. Remove only that remote call so the normal
+        // local update runs and the map appears in Recently Deleted.
+        val moveToTrashIndex =
+            CloudMoveToTrashFingerprint.match().instructionMatches.first().index
+        CloudMoveToTrashFingerprint.method.removeInstructions(moveToTrashIndex, 2)
+
+        // Both trash refresh paths delete local trash rows before asking the
+        // server for its list. If that request fails, locally trashed maps
+        // disappear. Turn those DELETE statements into harmless SELECTs so
+        // local trash entries are kept.
+        val teamTrashClearIndex =
+            TeamTrashClearFingerprint.match().instructionMatches.first().index
+        TeamTrashClearFingerprint.method.replaceInstruction(
+            teamTrashClearIndex,
+            "const-string v8, \"SELECT 1 FROM TrashEntity WHERE 0\"",
+        )
+
+        val trashRefreshClearIndex =
+            TrashRefreshClearFingerprint.match().instructionMatches.first().index
+        TrashRefreshClearFingerprint.method.replaceInstruction(
+            trashRefreshClearIndex,
+            "const-string v9, \"SELECT 1 FROM TrashEntity WHERE team_id \"",
         )
     }
 }
