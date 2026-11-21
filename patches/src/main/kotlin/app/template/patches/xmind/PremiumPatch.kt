@@ -1,8 +1,9 @@
 package app.template.patches.xmind
 
+import app.morphe.patcher.extensions.InstructionExtensions.addInstructions
 import app.morphe.patcher.patch.patch
 import app.morphe.patcher.util.returnEarly
-import app.template.patches.shared.Constants.COMPATIBILITY_XMIND
+import app.template.patches.xmind.Constants.COMPATIBILITY_XMIND
 
 /**
  * Unlocks Xmind's locally enforced premium / Pro entitlements.

@@ -14,7 +14,7 @@ val COMPATIBILITY_XMIND = Compatibility(
     name = "Xmind",
     packageName = "net.xmind.doughnut",
     apkFileType = ApkFileType.APKS,
-    appIconColor = 0xFF1A73E8,
+    appIconColor = 0xFF1A73E8.toInt(),
     targets = listOf(
         // Confirmed working against this exact build.
         AppTarget(version = "27.01.05467"),
