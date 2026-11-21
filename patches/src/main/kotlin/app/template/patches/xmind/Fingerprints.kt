@@ -178,8 +178,8 @@ object TeamTrashClearFingerprint : Fingerprint(
 /** Trash screen refresh clears one team's local trash rows before reinserting server rows. */
 object TrashRefreshClearFingerprint : Fingerprint(
     definingClass = "Laq/h;",
-    name = "e",
-    accessFlags = listOf(AccessFlags.PRIVATE, AccessFlags.FINAL),
+    name = "invoke",
+    accessFlags = listOf(AccessFlags.PUBLIC, AccessFlags.FINAL),
     returnType = "Ljava/lang/Object;",
     parameters = listOf("Ljava/lang/Object;"),
     filters = listOf(string("DELETE FROM TrashEntity WHERE team_id ")),
