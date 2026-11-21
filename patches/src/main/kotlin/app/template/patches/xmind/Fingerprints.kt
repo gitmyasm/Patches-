@@ -80,3 +80,16 @@ object PlanTierFingerprint : Fingerprint(
     returnType = "Lgm/h;",
     parameters = listOf("Lrm/x;"),
 )
+
+/**
+ * PairIP entry point, called from the Application's attachBaseContext() and
+ * from LicenseContentProvider. On a re-signed APK a failed license check
+ * schedules an app shutdown and shows an error activity, so skip it.
+ */
+object PairIpLicenseCheckFingerprint : Fingerprint(
+    definingClass = "Lcom/pairip/licensecheck/LicenseClient;",
+    name = "checkLicense",
+    accessFlags = listOf(AccessFlags.PUBLIC, AccessFlags.STATIC),
+    returnType = "V",
+    parameters = listOf("Landroid/content/Context;"),
+)

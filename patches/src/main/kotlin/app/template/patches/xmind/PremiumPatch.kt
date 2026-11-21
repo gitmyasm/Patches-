@@ -60,5 +60,10 @@ val unlockPremiumPatch = patch(
                 return-object v0
             """.trimIndent(),
         )
+
+        // --- 5. PairIP ---------------------------------------------------
+        // A re-signed APK fails Play's license check, which otherwise shuts
+        // the app down. Skip the check entirely.
+        PairIpLicenseCheckFingerprint.method.returnEarly()
     }
 }
